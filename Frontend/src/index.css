@@ -1,8 +1,35 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+html {
+    scroll-behavior: smooth;
+}
+
 body{
     margin: 0;
     min-height: 100vh;
     background-color: #0F172A;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+.typing-title {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 3.5s steps(18, end), blink 0.75s step-end infinite;
 }

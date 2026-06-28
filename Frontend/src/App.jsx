@@ -1,13 +1,17 @@
 import Rodape from "./Components/Rodape.jsx"
 import Navbar from "./Components/Navbar.jsx"
-import About from "./Pages/About.jsx"
+import Home from "./Pages/Home.jsx"
+import Circuit from "./Pages/Circuit.jsx"
+import Tables from "./Pages/Tables.jsx"
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1 p-6 text-white">
-        <Navbar />
-        <About />
+    <div>
+      <Navbar />
+      <main>
+        <Home />
+        <Circuit />
+        <Tables />
       </main>
       <Rodape />
     </div>

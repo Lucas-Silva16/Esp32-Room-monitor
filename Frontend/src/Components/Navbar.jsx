@@ -1,6 +1,7 @@
+
 function Navbar() {
     return (
-        <div className="navbar w-full bg-base-100 shadow-sm">
+        <div className="navbar sticky top-0 z-50 w-full bg-base-100 shadow-sm">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -10,20 +11,25 @@ function Navbar() {
                         tabIndex={-1}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                     >
-                        <li><a>About</a></li>
-                        <li><a>Circuit</a></li>
-                        <li><a>Data Tables</a></li>
-                        <li><a>Contact</a></li>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#circuit">Circuit</a></li>
+                        <li><a href="#tables">Tables</a></li>
                     </ul>
                 </div>
             </div>
             <div className="navbar-center">
-                <a className="text-center text-[20px]">ESP32 Room Monitor</a>
+                <a 
+                href="#home" 
+                className="typing-title text-center text-[20px] font-mono font-bold text-white"
+                >
+                    ESP32 Room Monitor
+                </a>
             </div>
             <div className="navbar-end">
             </div>
         </div>
     )
 }
+
 
 export default Navbar
