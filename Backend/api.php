@@ -26,14 +26,11 @@ if($_SERVER['REQUEST_METHOD'] ==='GET'){
 }
 
 if($_SERVER['REQUEST_METHOD'] !== 'POST'){
-    die(metodo nao permitido);
+    die("metodo nao permitido");
 }
 
 $data = json_decode(file_get_contents('php://input'),true);
 
-if(!isset( $data['temp'], $data['hum'], $data['distancia'],$data['horaAtual'] )){
-    die(dados em falta);
-}
 
 //enviar os dados para a BD
 if ($data['tipo'] === 'passagem') {

@@ -15,12 +15,10 @@
 #define SOUND_VELOCITY  0.034
 #define MAX_DISTANCE    200
 #define LIMIAR_CM       80
-#define INTERVALO_MS    1800000   
+#define INTERVALO_MS    600000   
 
 // --------------- NTP ---------------
 #define NTP_SERVER  "pool.ntp.org"
-//SV
-#define API_URL "http://localhost/phpmyadmin/"
 
 // --------------- Objetos e variáveis ---------------
 DHTesp dht;
@@ -69,7 +67,7 @@ void loop() {
       Serial.print(" cm | ");
       Serial.println(horaAtual());
 
-    enviarPassagens(-1,-1,distancia,);
+    enviarPassagens(distancia);
     }
   } else {
     passagemAtiva = false;
@@ -92,7 +90,7 @@ void loop() {
     Serial.print(" % | ");
     Serial.println(horaAtual());
 
-    enviarDados(leitura.temperature,leitura.humidity,-1);
+    enviarTemp(leitura.temperature,leitura.humidity);
   }
 
   delay(100);
