@@ -2,6 +2,9 @@
 #include "secret.h"
 #include <WiFi.h>
 #include <time.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
+
 
 // --------------- Pinos ---------------
 #define DHT_PIN        13
@@ -16,6 +19,8 @@
 
 // --------------- NTP ---------------
 #define NTP_SERVER  "pool.ntp.org"
+//SV
+#define API_URL "http://localhost/phpmyadmin/"
 
 // --------------- Objetos e variáveis ---------------
 DHTesp dht;
@@ -38,11 +43,11 @@ void setup() {
   digitalWrite(TRIG_PIN, LOW);
   dht.setup(DHT_PIN, DHTesp::DHT11);
 
-  // --------------- Ligar ao WiFi de forma silenciosa ---------------
+  // --------------- Ligar ao WiFi---------------
   WiFi.begin(WIFI_SSID, WIFI_PASS);
   while (WiFi.status() != WL_CONNECTED) delay(500);
 
-  // --------------- Sincronizar hora via NTP (Com horário de Verão) ---------------
+  // --------------- Sincronizar hora via NTP  ---------------
   setenv("TZ", "WET0WEST,M3.5.0/1,M10.5.0", 1);
   tzset();
   configTime(3600, 0, NTP_SERVER);
@@ -63,6 +68,8 @@ void loop() {
       Serial.print(distancia);
       Serial.print(" cm | ");
       Serial.println(horaAtual());
+
+    enviarPassagens(-1,-1,distancia,);
     }
   } else {
     passagemAtiva = false;
@@ -84,6 +91,8 @@ void loop() {
     Serial.print(leitura.humidity);
     Serial.print(" % | ");
     Serial.println(horaAtual());
+
+    enviarDados(leitura.temperature,leitura.humidity,-1);
   }
 
   delay(100);
@@ -100,4 +109,41 @@ float medirDistancia() {
   long duracao = pulseIn(ECHO_PIN, HIGH, (MAX_DISTANCE * 2 / SOUND_VELOCITY));
   if (duracao == 0) return -1;
   return (duracao * SOUND_VELOCITY) / 2.0;
+}
+
+//---enviar os dados em json
+
+// Envia temperatura e humidade
+void enviarTemp(float temp, float hum) {
+  if (WiFi.status() != WL_CONNECTED) return;
+  HTTPClient http;
+  http.begin(API_URL);
+  http.addHeader("Content-Type", "application/json");
+
+  StaticJsonDocument<128> doc;
+  doc["tipo"]     = "temp";
+  doc["temp"]     = temp;
+  doc["humidade"] = hum;
+
+  String payload;
+  serializeJson(doc, payload);
+  http.POST(payload);
+  http.end();
+}
+//Enviar dados do sensor de movimento
+void enviarPassagens(float distancia){
+  if (WiFi.status() != WL_CONNECTED) return;
+  HTTPClient http;
+  http.begin(API_URL);
+  http.addHeader("Content-Type", "application/json");
+  
+  StaticJsonDocument<64> doc;
+  doc["tipo"] = "passagem";
+  doc["distancia"] = distancia;
+
+  String payload;
+  serializeJson(doc,payload);
+  http.POST(payload);
+  http.end();
+
 }
